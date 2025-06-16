@@ -1,33 +1,30 @@
-import os
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-import math
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import Select
 
 try:
-    service = Service(ChromeDriverManager().install())
+    link = "https://suninjuly.github.io/selects1.html"
+    service = Service(executable_path=ChromeDriverManager().install())
     browser = webdriver.Chrome(service=service)
-    browser.get("https://suninjuly.github.io/file_input.html")
+    browser.get(link)
 
+    x_element = browser.find_element(By.ID, "num1")
+    x = int(x_element.text)
+    y_element = browser.find_element(By.ID, "num2")
+    y = int(y_element.text)
+
+    calc = str(x + y)
 
     # Находим поля и заполняем их
-    browser.find_element(By.NAME, "firstname").send_keys("Ivan")
-
-    # Находим поля и заполняем их
-    browser.find_element(By.NAME, "lastname").send_keys("Ivanov")
-
-    browser.find_element(By.NAME, "email").send_keys("<EMAIL>")
-
-    text_file = browser.find_element(By.ID, "file")
-    file_path = os.path.abspath('file.txt')
-    text_file.send_keys(file_path)
+    select = Select(browser.find_element(By.TAG_NAME, "select"))
+    select.select_by_visible_text(calc)
 
     # Нажимаем кнопку Submit
-    browser.find_element(By.CLASS_NAME, "btn").click()
-
+    button = browser.find_element(By.CLASS_NAME, "btn")
+    button.click()
 
 
 finally:

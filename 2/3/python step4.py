@@ -6,14 +6,20 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def calc(x):
-    return str(math.log(abs(12 * math.sin(int(x)))))
+def calc(a):
+    return str(math.log(abs(12 * math.sin(int(a)))))
 
 
 try:
     service = Service(ChromeDriverManager().install())
     browser = webdriver.Chrome(service=service)
-    browser.get("https://SunInJuly.github.io/execute_script.html")
+    browser.get("http://suninjuly.github.io/redirect_accept.html")
+
+    # Нажимаем кнопку Submit
+    browser.find_element(By.CSS_SELECTOR, "button.trollface.btn.btn-primary").click()
+
+    new_window = browser.window_handles[1]
+    browser.switch_to.window(new_window)
 
     x_element = browser.find_element(By.ID, "input_value")
     x = int(x_element.text)
@@ -22,17 +28,8 @@ try:
     # Находим поля и заполняем их
     browser.find_element(By.ID, "answer").send_keys(y)
 
-    # Находим поля и заполняем их
-    browser.find_element(By.ID, "robotCheckbox").click()
-
-    radio = browser.find_element(By.ID, "robotsRule")
-    browser.execute_script("arguments[0].scrollIntoView(true);", radio)
-    radio.click()
-
     # Нажимаем кнопку Submit
     browser.find_element(By.CLASS_NAME, "btn").click()
-
-
 
 finally:
     # Ждём, чтобы увидеть результат (можно убрать после отладки)
